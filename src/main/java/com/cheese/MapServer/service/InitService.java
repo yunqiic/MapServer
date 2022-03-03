@@ -18,8 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class InitService
-{
+public class InitService {
     @Value("#{'${map-server.init-dirs}'.split(',')}")
     public List<String> initCreateDirs;
 
@@ -30,15 +29,14 @@ public class InitService
     public void init() {
         for (String dirPath : initCreateDirs) {
             File create = new File(dirPath.trim());
-            if(!create.exists()) {
+            if (!create.exists()) {
                 create.mkdir();
             }
         }
     }
 
     public List<ThreadReqParamInfo> getLevelPic(BackgroundType type, Integer level, Double left,
-                               Double right, Double top, Double bottom)
-    {
+                                                Double right, Double top, Double bottom) {
         List<ThreadReqParamInfo> errorList = InitUtils.getLevelPic(type, level, left, right, top, bottom);
         addConfig(type, level, left, right, top, bottom);
 
@@ -46,13 +44,11 @@ public class InitService
     }
 
     public void addConfig(BackgroundType type, Integer level, Double left,
-                             Double right, Double top, Double bottom)
-    {
-        try
-        {
+                          Double right, Double top, Double bottom) {
+        try {
             File configFile = new File(configFilePath);
             MapConfig mapConfig = new MapConfig();
-            if(configFile.exists())
+            if (configFile.exists())
                 mapConfig = new Gson().fromJson(FileUtils.readFileByUtf8(configFilePath),
                         MapConfig.class);
 
@@ -62,10 +58,9 @@ public class InitService
             area.setBottom(bottom);
             area.setTop(top);
 
-            if(mapConfig.getConfig().containsKey(type))
+            if (mapConfig.getConfig().containsKey(type))
                 mapConfig.getConfig().get(type).put(level, area);
-            else
-            {
+            else {
                 Map<Integer, MapConfig.PicArea> levelArea = new HashMap<>();
                 levelArea.put(level, area);
                 mapConfig.getConfig().put(type, levelArea);
@@ -74,9 +69,7 @@ public class InitService
             FileWriter fileWriter = new FileWriter(configFile);
             fileWriter.write(new Gson().toJson(mapConfig));
             fileWriter.close();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

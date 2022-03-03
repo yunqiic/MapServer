@@ -16,22 +16,20 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/server")
-public class ServerController
-{
+public class ServerController {
     @RequestMapping(
             value = "/map/{type}/{x}/{y}/{z}",
             method = RequestMethod.GET,
-            produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_PNG_VALUE}
-            )
+            produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_PNG_VALUE}
+    )
     public byte[] initMap(@PathVariable Integer x, @PathVariable Integer y,
-                        @PathVariable Integer z, @PathVariable String type) throws IOException
-    {
+                          @PathVariable Integer z, @PathVariable String type) throws IOException {
         String path = InitUtils.getPathByType(InitUtils.getTypeByName(type));
 
         String imgPath = path + z + "/" + x + "/" + y + "/img.jpg";
         File file = new File(imgPath);
         FileInputStream inputStream = new FileInputStream(file);
-        byte[] data = new byte[(int)file.length()];
+        byte[] data = new byte[(int) file.length()];
         inputStream.read(data);
         inputStream.close();
 
@@ -39,20 +37,16 @@ public class ServerController
     }
 
     @RequestMapping("/config")
-    public MapConfig getConfig()
-    {
-        try
-        {
+    public MapConfig getConfig() {
+        try {
             File configFile = new File("map/map.config.json");
             MapConfig mapConfig = new MapConfig();
-            if(configFile.exists())
+            if (configFile.exists())
                 mapConfig = new Gson().fromJson(FileUtils.readFileByUtf8("map/map.config.json"),
                         MapConfig.class);
 
             return mapConfig;
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return new MapConfig();

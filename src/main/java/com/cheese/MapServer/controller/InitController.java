@@ -12,15 +12,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/init")
-public class InitController
-{
+public class InitController {
     @Autowired
     InitService initService;
 
     @RequestMapping("/initMap")
     public InitResult initMap(Double left, Double right, Double top,
-                              Double bottom, Integer level, String type)
-    {
+                              Double bottom, Integer level, String type) {
         List<ThreadReqParamInfo> errorList = initService.getLevelPic(InitUtils.getTypeByName(type),
                 level, left, right, top, bottom);
 
