@@ -1,7 +1,6 @@
 package com.cheese.MapServer.utils;
 
-public enum BackgroundType
-{
+public enum BackgroundType {
     Google_Satellite,
     Google_Image,
     Google_Terrain,

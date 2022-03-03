@@ -18,8 +18,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.UnaryOperator;
 
-public class InitUtils
-{
+public class InitUtils {
     // Web墨卡托投影的长或宽的一半，单位为M
     private static Double WEB_MOC_HALF_WIDTH = 20037508.3427892;
 
@@ -36,8 +35,7 @@ public class InitUtils
 
 
     public static List<ThreadReqParamInfo> getLevelPic(BackgroundType type, Integer level, Double left,
-                                      Double right, Double top, Double bottom)
-    {
+                                                       Double right, Double top, Double bottom) {
         LevelInfo levelInfo = getLevelInfo(level, left, right, top, bottom);
 
         // 开多线程请求图片
@@ -46,8 +44,8 @@ public class InitUtils
 
         // 看自己以前的代码真的辣眼睛。。。
         ExecutorService executorService = Executors.newFixedThreadPool(50);
-        for(int x = levelInfo.getxL() ; x <= levelInfo.getxR() ; x ++) {
-            for(int y = levelInfo.getyT(); y <= levelInfo.getyB() ; y ++) {
+        for (int x = levelInfo.getxL(); x <= levelInfo.getxR(); x++) {
+            for (int y = levelInfo.getyT(); y <= levelInfo.getyB(); y++) {
                 final int fX = x;
                 final int fY = y;
                 Runnable getPicRunnable = () -> {
@@ -74,57 +72,50 @@ public class InitUtils
     }
 
     public static LevelInfo getLevelInfo(Integer level, Double left,
-                                         Double right, Double top, Double bottom)
-    {
+                                         Double right, Double top, Double bottom) {
         LevelInfo levelInfo = new LevelInfo();
         LatLngInfo leftTopMocPoint = CoodUtils.lonLatToGoogleMercator(left, top);
         LatLngInfo rightBottomMocPoint = CoodUtils.lonLatToGoogleMercator(right, bottom);
 
         Double perTileWidth = WEB_MOC_HALF_WIDTH * 2 / Math.pow(2, level);
         levelInfo.setZ(level);
-        levelInfo.setxL((int)(leftTopMocPoint.getLongitude() / perTileWidth));
-        levelInfo.setxR((int)(rightBottomMocPoint.getLongitude() / perTileWidth));
-        levelInfo.setyT((int)(leftTopMocPoint.getLatitude() / perTileWidth));
-        levelInfo.setyB((int)(rightBottomMocPoint.getLatitude() / perTileWidth));
+        levelInfo.setxL((int) (leftTopMocPoint.getLongitude() / perTileWidth));
+        levelInfo.setxR((int) (rightBottomMocPoint.getLongitude() / perTileWidth));
+        levelInfo.setyT((int) (leftTopMocPoint.getLatitude() / perTileWidth));
+        levelInfo.setyB((int) (rightBottomMocPoint.getLatitude() / perTileWidth));
 
         return levelInfo;
     }
 
-    public static Boolean getPic(BackgroundType type, Integer x, Integer y, Integer z)
-    {
-        try
-        {
+    public static Boolean getPic(BackgroundType type, Integer x, Integer y, Integer z) {
+        try {
             File saveImg = new File(getPathByType(type) + z + "/" + x + "/" + y + "/img.jpg");
             String url = buildUrl(x, y, z, type);
             BufferedImage image = HttpUtils.getImage(url);
 
-            if(saveImg.exists())
+            if (saveImg.exists())
                 return true;
 
             File xF = new File(getPathByType(type) + z);
-            if(!xF.exists())xF.mkdir();
-            File xyF = new File(getPathByType(type) + z + "/" + x );
-            if(!xyF.exists())xyF.mkdir();
+            if (!xF.exists()) xF.mkdir();
+            File xyF = new File(getPathByType(type) + z + "/" + x);
+            if (!xyF.exists()) xyF.mkdir();
             File xyzF = new File(getPathByType(type) + z + "/" + x + "/" + y);
-            if(!xyzF.exists())xyzF.mkdir();
+            if (!xyzF.exists()) xyzF.mkdir();
 
-            ImageIO.write(image,"jpeg", saveImg);
+            ImageIO.write(image, "jpeg", saveImg);
 
             System.out.println(saveImg.getAbsolutePath());
             return true;
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    private static String buildUrl(Integer x, Integer y, Integer z, BackgroundType type)
-    {
+    private static String buildUrl(Integer x, Integer y, Integer z, BackgroundType type) {
         String url = "";
-        switch (type)
-        {
+        switch (type) {
             case Google_Satellite:
                 url = Google_Satellite_Url;
                 break;
@@ -161,11 +152,9 @@ public class InitUtils
         return url;
     }
 
-    public static String getPathByType(BackgroundType type)
-    {
+    public static String getPathByType(BackgroundType type) {
         String result = "";
-        switch (type)
-        {
+        switch (type) {
             case AMap_Cover:
                 result = "map/amap/cover/";
                 break;
@@ -198,12 +187,10 @@ public class InitUtils
         return result;
     }
 
-    public static BackgroundType getTypeByName(String typeName)
-    {
+    public static BackgroundType getTypeByName(String typeName) {
         BackgroundType type = BackgroundType.Google_Satellite;
 
-        switch (typeName)
-        {
+        switch (typeName) {
             case "google-satellite":
                 type = BackgroundType.Google_Satellite;
                 break;
