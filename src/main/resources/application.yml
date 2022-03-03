@@ -1,5 +1,5 @@
 server:
-  port: 2018
+  port: 8013
 
 map-server:
   init-dirs:  map, map/google, map/google/satellite, map/google/image, map/google/terrain,
