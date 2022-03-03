@@ -1,39 +1,32 @@
 package com.cheese.MapServer.bean;
 
-public class InitResult
-{
+public class InitResult {
     private Boolean success;
     private String type;
     private Integer level;
     private Object errorList;
 
-    public Boolean getSuccess()
-    {
+    public Boolean getSuccess() {
         return success;
     }
 
-    public void setSuccess(Boolean success)
-    {
+    public void setSuccess(Boolean success) {
         this.success = success;
     }
 
-    public String getType()
-    {
+    public String getType() {
         return type;
     }
 
-    public void setType(String type)
-    {
+    public void setType(String type) {
         this.type = type;
     }
 
-    public Integer getLevel()
-    {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(Integer level)
-    {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 
